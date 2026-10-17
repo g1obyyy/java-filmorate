@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -19,20 +21,31 @@ public class UserController {
 
     @GetMapping
     public Collection<User> getAll() {
-        return new ArrayList<>(users.values());
+        log.info("Получен запрос на получение всех пользователей");
+
+        Collection<User> result = new ArrayList<>(users.values());
+
+        log.debug("Найдено пользователей: {}", result.size());
+        return result;
     }
 
     @PostMapping
     public User create(@RequestBody User newUser) {
+        log.info("Получен запрос на создание пользователя");
         validateUserObj(newUser);
 
         newUser.setId(nextId.incrementAndGet());
         users.put(newUser.getId(), newUser);
+
+        log.info("Пользователь успешно создан: id={}, login={}",
+                newUser.getId(), newUser.getLogin());
         return newUser;
     }
 
     @PutMapping
     public User update(@RequestBody User newUser) {
+        log.info("Получен запрос на обновление пользователя");
+
         validateUserObj(newUser);
         if (newUser.getId() == null) {
             throw new ValidationException("Id должен быть указан");
@@ -42,6 +55,9 @@ public class UserController {
         if (oldUser == null) {
             throw new NotFoundException("Пользователь id = " + newUser.getId() + " не найден");
         }
+
+        log.info("Пользователь успешно обновлен: id={}, login={}",
+                newUser.getId(), newUser.getLogin());
         return newUser;
     }
 
