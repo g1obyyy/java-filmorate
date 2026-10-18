@@ -33,7 +33,7 @@ public class UserController {
     public User create(@Valid @RequestBody User newUser) {
         log.info("Получен запрос на создание пользователя");
 
-        switchNameToLogin(newUser);
+        newUser.setDefaultName();
 
         newUser.setId(nextId.incrementAndGet());
         users.put(newUser.getId(), newUser);
@@ -51,7 +51,7 @@ public class UserController {
             throw new ValidationException("Id должен быть указан");
         }
 
-        switchNameToLogin(newUser);
+        newUser.setDefaultName();
 
         User oldUser = users.replace(newUser.getId(), newUser);
         if (oldUser == null) {
@@ -61,11 +61,5 @@ public class UserController {
         log.info("Пользователь успешно обновлен: id={}, login={}",
                 newUser.getId(), newUser.getLogin());
         return newUser;
-    }
-
-    private void switchNameToLogin(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
     }
 }

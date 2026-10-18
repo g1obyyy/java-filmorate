@@ -22,4 +22,10 @@ public class User {
     @NotNull(message = "Дата рождения должна быть указана")
     @PastOrPresent(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
+
+    public void setDefaultName() {
+        if (name == null || name.isBlank()) {
+            name = login;
+        }
+    }
 }
