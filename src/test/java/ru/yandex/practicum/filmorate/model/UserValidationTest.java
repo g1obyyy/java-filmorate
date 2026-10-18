@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate;
+package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.lang.annotation.Annotation;
 import java.time.LocalDate;
