@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.handlers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +41,18 @@ public class GlobalExceptionHandler {
 
         log.warn("Ошибка автоматической валидации: {}", message);
         return errorResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleUnreadableJson(HttpMessageNotReadableException e) {
+        log.warn("Некорректное тело запроса: {}", e.getMessage());
+        return errorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleUnexpectedException(Exception e) {
+        log.error("Непредвиденная ошибка сервера: {}", e.getMessage());
+        return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     private ResponseEntity<Map<String, String>> errorResponse(HttpStatus status, String message) {

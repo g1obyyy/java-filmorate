@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final ConcurrentHashMap<Long, User> users = new ConcurrentHashMap<>();
+    private final Map<Long, User> users = new ConcurrentHashMap<>();
     private final AtomicLong nextId = new AtomicLong(0);
 
     @GetMapping
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@RequestBody User newUser) {
+    public User update(@Valid @RequestBody User newUser) {
         log.info("Получен запрос на обновление пользователя");
 
         if (newUser.getId() == null) {

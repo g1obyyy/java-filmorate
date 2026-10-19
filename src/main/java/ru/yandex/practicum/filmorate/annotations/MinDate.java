@@ -13,7 +13,7 @@ public @interface MinDate {
 
     String value();
 
-    String message() default "Дата не может быть раньше {}";
+    String message() default "Дата не может быть раньше {value}";
 
     Class<?>[] groups() default {};
 

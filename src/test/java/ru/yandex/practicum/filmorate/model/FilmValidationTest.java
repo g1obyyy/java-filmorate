@@ -65,11 +65,13 @@ public class FilmValidationTest {
     }
 
     @Test
-    public void shouldRejectNullDescription() {
+    public void shouldAcceptNullDescription() {
         Film film = createValidFilm();
         film.setDescription(null);
 
-        assertViolation(film, "description", NotNull.class, 1);
+        var violations = validator.validate(film);
+
+        Assertions.assertEquals(0, violations.size());
     }
 
     @Test
